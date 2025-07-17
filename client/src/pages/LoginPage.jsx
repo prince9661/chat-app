@@ -56,7 +56,7 @@ const LoginPage = () => {
         })
 
         if (res.data.success) {
-          toast.success('Account verified and created!')
+          toast.success('🎉 Account created! Welcome email sent.')
           login('login', { email, password }) // auto-login
         } else {
           toast.error(res.data.message)

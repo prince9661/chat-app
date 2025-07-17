@@ -2,11 +2,13 @@ import { generateToken } from "../lib/utils.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import cloudinary from "../lib/cloudinary.js";
+
 // import { sendOTPEmail } from "../lib/sendOTP.js";
 
 // Signup a new user
 import crypto from "crypto";
 import { sendOTPEmail } from "../lib/sendOTP.js"; // make sure path is correct
+import { sendAccountCreatedEmail } from "../lib/sendAccountCreatedEmail.js";
 
 export const signup = async (req, res) => {
   const { fullName, email, password, bio } = req.body;
@@ -73,8 +75,8 @@ export const verifyOTP = async (req, res) => {
     user.password = await bcrypt.hash(password, 10);
 
     await user.save();
-
     const token = generateToken(user._id);
+    await sendAccountCreatedEmail(user.email, user.fullName);
     res.json({
       success: true,
       token,
